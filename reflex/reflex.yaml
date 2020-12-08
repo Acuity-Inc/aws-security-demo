@@ -1,0 +1,175 @@
+---
+# Reflex CLI version
+
+cli_version: 1.3.0
+
+
+# Reflex engine version
+
+engine_version: v2.1.3
+
+
+# Values for common configurations across reflex
+
+globals:
+  default_email: jesse.adams@myacuity.com
+
+
+# Terraform backend configuration (optional)
+# Example format:
+# backend:
+#   s3:
+#   - bucket: terraform-bucket
+#   - key: reflex-state
+#   - region: us-east-1
+
+backend:
+  s3:
+    - bucket: acuity-aws-security
+    - key: reflex-state
+    - region: us-east-2
+
+
+# Terraform provider configuration
+# Example format
+# providers:
+# - aws:
+#    parent_account: "123456789012"
+#    child_accounts:
+#      - "234567890123"
+#      - "345678901234"
+#    region: us-east-1
+#    forwarding_regions:
+#      - us-east-2
+#      - eu-west-1
+
+providers:
+- aws:
+    region: us-east-2
+
+
+# List of selected reflex rules
+# Example format
+# rules:
+#   aws:
+#   - s3-bucket-not-encrypted:
+#       configuration:
+#         mode: detect
+#       version: v0.6.0
+
+rules:
+  aws:
+  - s3-bucket-not-encrypted:
+      configuration:
+        mode: remediate
+      version: v2.1.9
+  - s3-bucket-public-access-block-disabled:
+      version: v2.0.4
+  - iam-mfa-deactivated:
+      version: v2.0.3
+  - root-user-activity:
+      version: v2.0.3
+  - ec2-public-ami:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - s3-bucket-public-access-block-disabled:
+      version: v2.0.4
+  - ec2-ami-not-encrypted:
+      version: v2.0.5
+  - ebs-public-snapshot:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - ebs-volume-not-encrypted:
+      version: v2.0.3
+  - sqs-queue-not-encrypted:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - s3-logging-not-enabled:
+      version: v2.0.3
+  - ec2-security-group-open-ingress:
+      version: v2.0.6
+  - cloudwatch-alarms-deleted:
+      version: v2.0.3
+  - config-rule-deleted:
+      version: v2.0.3
+  - account-password-policy-insecure:
+      configuration:
+        allow_users_to_change_password: 'true'
+        hard_expiry: 'false'
+        max_password_age: 90
+        minimum_password_length: 14
+        mode: detect
+        password_reuse_prevention: 24
+        require_lowercase_characters: 'true'
+        require_numbers: 'true'
+        require_symbols: 'true'
+        require_uppercase_characters: 'true'
+      version: v2.0.5
+  - cloudtrail-logging-stopped:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - cloudtrail-log-file-validation-disabled:
+      version: v2.0.3
+  - cloudtrail-deleted:
+      version: v2.0.3
+  - cloudtrail-not-encrypted:
+      version: v2.0.3
+  - ec2-instance-termination-protection-disabled:
+      version: v2.0.4
+  - rds-public-snapshot:
+      version: v2.0.3
+  - cloudfront-logging-disabled:
+      version: v2.0.3
+  - rds-deletion-protection-disabled:
+      version: v2.0.3
+  - budget-modified-or-deleted:
+      version: v2.0.3
+  - ebs-encryption-by-default-deactivated:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - rds-snapshot-unencrypted:
+      version: v2.0.3
+  - role-permissions-boundary-changed-or-deleted:
+      version: v2.0.3
+  - user-permissions-boundary-changed-or-deleted:
+      version: v2.0.3
+  - rds-instance-unencrypted:
+      version: v2.0.3
+  - cloudfront-viewer-tls-protocol:
+      version: v2.0.3
+  - rds-automated-backup-disabled:
+      configuration:
+        default_backup_retention: 1
+        mode: detect
+      version: v2.0.5
+  - cloudfront-origin-tls-versions:
+      version: v2.0.3
+  - kms-key-rotation-disabled:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - s3-bucket-acl-public-access:
+      version: v2.0.4
+  - s3-bucket-policy-public-access:
+      version: v2.0.4
+  - kms-key-deletion-scheduled:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - s3-versioning-disabled:
+      version: v2.0.5
+  - cloudwatch-logs-unencrypted:
+      version: v2.0.3
+  - dynamodb-point-in-time-recovery-disabled:
+      configuration:
+        mode: detect
+      version: v2.0.3
+  - ebs-snapshot-unencrypted:
+      version: v2.0.3
+  - elb-access-logs-disabled:
+      version: v1.0.0

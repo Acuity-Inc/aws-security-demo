@@ -1,0 +1,117 @@
+Resources:
+  S3RemediateRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: s3-remediate-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ssm.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+  AwsConfigRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: aws-config-service-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - config.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSConfigRole
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+  ConfigRecorder:
+    Type: AWS::Config::ConfigurationRecorder
+    Properties:
+      Name: acuity
+      RecordingGroup:
+        ResourceTypes:
+          - "AWS::S3::Bucket"
+      RoleARN: !GetAtt AwsConfigRole.Arn
+  ConfigBucket:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: acuity-aws-config
+      AccessControl: LogDeliveryWrite
+  ConfigTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: acuity-aws-config
+      Subscription:
+        - Protocol: Email
+          Endpoint: jesse.adams@myacuity.com
+  DeliveryChannel:
+    Type: AWS::Config::DeliveryChannel
+    Properties:
+      ConfigSnapshotDeliveryProperties:
+        DeliveryFrequency: "Six_Hours"
+      S3BucketName:
+        Ref: ConfigBucket
+      SnsTopicARN:
+        Ref: ConfigTopic
+  S3BucketLoggingEnabled:
+    DependsOn: ConfigRecorder
+    Type: "AWS::Config::ConfigRule"
+    Properties:
+      ConfigRuleName: S3BucketLoggingEnabled
+      Description: "Checks whether logging is enabled for your S3 buckets."
+      Scope:
+        ComplianceResourceTypes:
+        - "AWS::S3::Bucket"
+      Source:
+        Owner: AWS
+        SourceIdentifier: S3_BUCKET_LOGGING_ENABLED
+  S3BucketLoggingEnabledRemediation:
+    DependsOn: S3BucketLoggingEnabled
+    Type: 'AWS::Config::RemediationConfiguration'
+    Properties:
+      ConfigRuleName: S3BucketLoggingEnabled
+      ResourceType: "AWS::S3::Bucket"
+      TargetId: "AWS-ConfigureS3BucketLogging"
+      TargetType: "SSM_DOCUMENT"
+      TargetVersion: "1"
+      Parameters:
+        AutomationAssumeRole:
+          StaticValue:
+            Values:
+              - !GetAtt S3RemediateRole.Arn
+        BucketName:
+          ResourceValue:
+            Value: "RESOURCE_ID"
+        TargetBucket:
+          StaticValue:
+            Values:
+              - acuity-bucket-logs
+        GrantedPermission:
+          StaticValue:
+            Values:
+              - "FULL_CONTROL"
+        GranteeType:
+          StaticValue:
+            Values:
+              - "Group"
+        GranteeUri:
+          StaticValue:
+            Values:
+              - "http://acs.amazonaws.com/groups/s3/LogDelivery"
+      ExecutionControls:
+        SsmControls:
+          ConcurrentExecutionRatePercentage: 10
+          ErrorPercentage: 10
+      Automatic: True
+      MaximumAutomaticAttempts: 10
+      RetryAttemptSeconds: 600

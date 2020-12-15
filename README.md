@@ -26,11 +26,15 @@ For the first demo, we will use AWS CloudFormation to automate the deployment of
 
 For the second demo, we will use Terraform to automate the deployment of an open source tool called [Reflex](https://reflexivesecurity.com/). It leverages [AWS EventBridge](https://aws.amazon.com/eventbridge/) and a collection of python [Lambdas](https://aws.amazon.com/lambda/) to mimic what AWS Config does. The biggest wins with this tool are that it detects and responds faster, is significantly cheaper, and you can create any rule you want with Python code.
 
-#### Wrap Up Assessement
+#### Wrap Up Assessment
 
 1. Which of the two approaches in this demo more closely matches or is more compatible with your project(s) architecture?
 2. What are some of the advantages and disadvantages of each approach?
 3. What are some other things that we could find or create a rule for to make an AWS account more secure that wasn't covered in this demo?
+
+### Pricing Comparison
+
+...
 
 ### Prerequisites
 

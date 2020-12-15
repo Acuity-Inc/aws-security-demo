@@ -3,6 +3,7 @@
 ### Prerequisites
 * Manually create the bucket for the S3 backend that tracks Terraform state.
   * In the reflex.yaml.example, I used `acuity-aws-security`
+* Ensure a [CloudTrail](https://aws.amazon.com/cloudtrail/) has been configured for the account.
 
 ### Demo Setup
 

@@ -33,6 +33,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSConfigRole
         - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
   ConfigRecorder:
     Type: AWS::Config::ConfigurationRecorder
     Properties:
@@ -43,7 +44,7 @@ Resources:
       RoleARN: !GetAtt AwsConfigRole.Arn
   ConfigBucket:
     Type: 'AWS::S3::Bucket'
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
     Properties:
       BucketName: acuity-aws-config
       AccessControl: LogDeliveryWrite

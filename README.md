@@ -9,6 +9,7 @@ This demo shows you two different approaches to automating security compliance c
 * Using [AWS Config](https://aws.amazon.com/config) to define a set of security rules and track resource compliance
 * Deploying required resources to power security automation using [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
 * Enabling automated remediation of certain rules that support it
+* Interacting with the AWS APIs using the [aws-cli](https://aws.amazon.com/cli/) to create an S3 bucket for testing purposes.
 * Deploying an open source tool using [Terraform](https://www.terraform.io/) that is a competitor to AWS Config
   * Seeing how it is faster, cheaper, and more configurable
 
@@ -36,6 +37,8 @@ For the second demo, we will use Terraform to automate the deployment of an open
 * Install the [aws-cli](https://aws.amazon.com/cli/). Please reach out to Jesse Adams if you would like access to the Acuity Labs AWS account.
 * Have an AWS account available and an [access_key and a secret_access_key pair generated](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
 * Run `aws configure` to configure the aws-ci
+* Install [Reflex](https://docs.reflexivesecurity.com/installation.html)
+  * Docs also cover dependencies of Terraform and Python
 
 ### AWS Security with Native Tools
 

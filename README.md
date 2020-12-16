@@ -22,7 +22,7 @@ This demo shows you two different approaches to automating security compliance c
 
 #### How the demo will work
 
-For the first demo, we will use AWS CloudFormation to automate the deployment of the required resources to deploy an AWS Config rule to monitor for [S3 buckets](https://aws.amazon.com/s3/) that do not have access logging configured. Once detected, this rule will also automatically remediate non-compliant resources by configure access logging with a preconfigured bucket. Additionally, [SNS](https://aws.amazon.com/sns/) will send an email notification at each step of the process.
+For the first demo, we will use AWS CloudFormation to automate the deployment of the required resources to deploy an AWS Config rule to monitor for [S3 buckets](https://aws.amazon.com/s3/) that do not have access logging configured. Once detected, this rule will also automatically remediate non-compliant resources by configuring access logging with a preconfigured bucket. Additionally, [SNS](https://aws.amazon.com/sns/) will send an email notification at each step of the process.
 
 For the second demo, we will use Terraform to automate the deployment of an open source tool called [Reflex](https://reflexivesecurity.com/). It leverages [AWS EventBridge](https://aws.amazon.com/eventbridge/) and a collection of python [Lambdas](https://aws.amazon.com/lambda/) to mimic what AWS Config does. The biggest wins with this tool are that it detects and responds faster, is significantly cheaper, and you can create any rule you want with Python code.
 
@@ -34,7 +34,10 @@ For the second demo, we will use Terraform to automate the deployment of an open
 
 ### Pricing Comparison
 
-...
+I unfortunately do not have any concrete data. However, rough calculations for a small account with not a lot of traffic would be:
+
+* AWS Config: ~$100/month
+* Reflex: ~$20/month
 
 ### Prerequisites
 
@@ -51,3 +54,16 @@ Full instructions can be found in [the native folder](native/)
 ### AWS Security with Open Source Tools
 
 Full instructions can be found in [the reflex folder](reflex/)
+
+### Where to go from here?
+
+#### AWS Native Services
+
+* See the full list of [AWS Config Managed Rules](https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html)
+* Look into grouping AWS Config Rules as Conformance Packs
+* Check out AWS' other security service offerings ([Macie](https://aws.amazon.com/macie/), [GuardDuty](https://aws.amazon.com/guardduty/), [SecurityHub](https://aws.amazon.com/security-hub/), etc)
+
+#### Reflex
+
+See the full list of [Reflex Rules](https://github.com/reflexivesecurity?q=reflex-aws&type=&language=)
+Consider [writing a custom rule](https://docs.reflexivesecurity.com/customization.html#creating-custom-rules)
